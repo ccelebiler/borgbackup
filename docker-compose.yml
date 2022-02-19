@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  borgbackup:
+    build: ./build/borgbackup
+    image: borgbackup:1.1.17-r2
+    container_name: borgbackup
+    env_file: .env
+    environment:
+      - CRON_SCHED_ARCHIVE=
+          [
+            {"cron":"0 1 * * *","path":"/var/www/html"}
+          ]
+      - CRON_SCHED_PRUNE=0 3 * * *
+      - BORG_ENCRYPTION=repokey-blake2
+      - BORG_COMPRESSION=auto,zlib,5
+      - BORG_LOG_LEVEL=INFO
+      - BORG_KEEP_DAILY=30
+    volumes:
+      - repo:/repo
+      - borg-etc:/etc/borg
+      - html-data:/var/www/html
+    logging:
+      driver: fluentd
+      options:
+        tag: '{{.DaemonName}}.{{.Name}}'
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  repo:
+  borg-etc:
+  html-data:
+
+networks:
+  app-network:
+    external: true
+    name: wordpress_app-network
