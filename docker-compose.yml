@@ -3,7 +3,7 @@ version: "3"
 services:
   borgbackup:
     build: ./build/borgbackup
-    image: borgbackup:1.1.17-r2
+    image: borgbackup:1.2.0-r0
     container_name: borgbackup
     env_file: .env
     environment:

@@ -1,8 +1,8 @@
-FROM alpine:3.15
+FROM alpine:3.16
 
 RUN apk add --no-cache \
 		python3 \
-		borgbackup=1.1.17-r2
+		borgbackup=1.2.0-r0
 
 COPY docker-entrypoint.py /root/
 
